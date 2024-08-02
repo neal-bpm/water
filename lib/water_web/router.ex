@@ -18,6 +18,13 @@ defmodule WaterWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/shoes", ShoeLive.Index, :index
+    live "/shoes/new", ShoeLive.Index, :new
+    live "/shoes/:id/edit", ShoeLive.Index, :edit
+
+    live "/shoes/:id", ShoeLive.Show, :show
+    live "/shoes/:id/show/edit", ShoeLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
