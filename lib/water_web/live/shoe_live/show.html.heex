@@ -1,0 +1,29 @@
+<.header>
+  Shoe <%= @shoe.id %>
+  <:subtitle>This is a shoe record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/shoes/#{@shoe}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit shoe</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Brand"><%= @shoe.brand %></:item>
+  <:item title="Size"><%= @shoe.size %></:item>
+  <:item title="Color"><%= @shoe.color %></:item>
+  <:item title="Style"><%= @shoe.style %></:item>
+</.list>
+
+<.back navigate={~p"/shoes"}>Back to shoes</.back>
+
+<.modal :if={@live_action == :edit} id="shoe-modal" show on_cancel={JS.patch(~p"/shoes/#{@shoe}")}>
+  <.live_component
+    module={WaterWeb.ShoeLive.FormComponent}
+    id={@shoe.id}
+    title={@page_title}
+    action={@live_action}
+    shoe={@shoe}
+    patch={~p"/shoes/#{@shoe}"}
+  />
+</.modal>

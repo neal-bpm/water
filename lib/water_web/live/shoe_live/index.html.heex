@@ -1,0 +1,44 @@
+<.header>
+  Listing Shoes
+  <:actions>
+    <.link patch={~p"/shoes/new"}>
+      <.button>New Shoe</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="shoes"
+  rows={@streams.shoes}
+  row_click={fn {_id, shoe} -> JS.navigate(~p"/shoes/#{shoe}") end}
+>
+  <:col :let={{_id, shoe}} label="Brand"><%= shoe.brand %></:col>
+  <:col :let={{_id, shoe}} label="Size"><%= shoe.size %></:col>
+  <:col :let={{_id, shoe}} label="Color"><%= shoe.color %></:col>
+  <:col :let={{_id, shoe}} label="Style"><%= shoe.style %></:col>
+  <:action :let={{_id, shoe}}>
+    <div class="sr-only">
+      <.link navigate={~p"/shoes/#{shoe}"}>Show</.link>
+    </div>
+    <.link patch={~p"/shoes/#{shoe}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, shoe}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: shoe.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="shoe-modal" show on_cancel={JS.patch(~p"/shoes")}>
+  <.live_component
+    module={WaterWeb.ShoeLive.FormComponent}
+    id={@shoe.id || :new}
+    title={@page_title}
+    action={@live_action}
+    shoe={@shoe}
+    patch={~p"/shoes"}
+  />
+</.modal>
